@@ -14,11 +14,11 @@ const signToken = (id: number): string => {
 };
 
 const createSendToken = (
-  user: any,
+  userId: number,
   statusCode: number,
   res: Response
 ): void => {
-  const token = signToken(user.id);
+  const token = signToken(userId);
   res.status(statusCode).json({
     status: "success",
     token,
@@ -57,7 +57,7 @@ export const register = async (
 
     await sendVerificationEmail(newUser, emailVerificationToken);
 
-    createSendToken(newUser, 201, res);
+    createSendToken(newUser.id, 201, res);
   } catch (err) {
     next(err);
   }
@@ -126,7 +126,7 @@ export const login = async (
       return;
     }
 
-    createSendToken(user, 200, res);
+    createSendToken(user.id, 200, res);
   } catch (err) {
     next(err);
   }
@@ -140,10 +140,14 @@ export const getMe = async (
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
+      },
     });
-    if (user) {
-      user.password = undefined;
-    }
+
     res.status(200).json({
       status: "success",
       data: {
@@ -163,9 +167,15 @@ export const updateUserRole = async (
   try {
     const user = await prisma.user.update({
       where: { id: parseInt(req.params.id, 10) },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
+      },
       data: { role: req.body.role },
     });
-    user.password = undefined;
+
     res.status(200).json({
       status: "success",
       data: {

@@ -23,13 +23,7 @@ router.post(
 );
 router.get("/", getAllBooks);
 router.get("/:id", getBookById);
-router.put(
-  "/:id",
-  protect,
-  restrictTo(Roles.ADMIN),
-  validateRequest(bookSchema),
-  updateBook
-);
+router.put("/:id", protect, restrictTo(Roles.ADMIN), updateBook);
 router.delete("/:id", protect, restrictTo(Roles.ADMIN), deleteBook);
 
 export default router;

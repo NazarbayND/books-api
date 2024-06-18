@@ -8,8 +8,13 @@ export const addBook = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    const { publicationDate, ...others } = req.body;
+
     const book = await prisma.book.create({
-      data: req.body,
+      data: {
+        ...others,
+        publicationDate: new Date(publicationDate),
+      },
     });
     res.status(201).json(book);
   } catch (err) {

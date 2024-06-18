@@ -6,37 +6,28 @@ const prisma = new PrismaClient();
 async function main() {
   const hashedPassword = await bcrypt.hash("password123", 12);
 
-  const user1 = await prisma.user.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      id: 1,
+  const user1 = await prisma.user.create({
+    data: {
       username: "admin",
-      email: "admin@example.com",
+      email: "admin@example.com1",
       password: hashedPassword,
       role: 2,
       emailVerified: true,
     },
   });
 
-  const user2 = await prisma.user.upsert({
-    where: { id: 2 },
-    update: {},
-    create: {
-      id: 2,
+  const user2 = await prisma.user.create({
+    data: {
       username: "user",
-      email: "user@example.com",
+      email: "user@example.com2",
       password: hashedPassword,
       role: 1,
       emailVerified: true,
     },
   });
 
-  const book1 = await prisma.book.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      id: 1,
+  const book1 = await prisma.book.create({
+    data: {
       title: "Book One",
       author: "Author One",
       publicationDate: new Date("2022-01-01"),
@@ -44,11 +35,8 @@ async function main() {
     },
   });
 
-  const book2 = await prisma.book.upsert({
-    where: { id: 2 },
-    update: {},
-    create: {
-      id: 2,
+  const book2 = await prisma.book.create({
+    data: {
       title: "Book Two",
       author: "Author Two",
       publicationDate: new Date("2023-01-01"),

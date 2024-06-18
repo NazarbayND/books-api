@@ -4,4 +4,5 @@ export interface User {
   email: string;
   role: number;
   emailVerified: boolean;
+  emailVerificationToken: string | null;
 }
