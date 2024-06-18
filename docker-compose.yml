@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: books
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+    restart: always
+    environment:
+      DATABASE_URL: postgres://admin:pass@db:5432/books
+      JWT_SECRET: Catcherintherye
+      JWT_EXPIRES_IN: 1d
+      PORT: 3000
+      SENDGRID_API_KEY: your_sendgrid_api_key
+      EMAIL_FROM: books@lovers.com
+      FRONTEND_URL: http://localhost:3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+volumes:
+  pgdata:
