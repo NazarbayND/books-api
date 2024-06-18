@@ -5,9 +5,9 @@ services:
     image: postgres:13
     restart: always
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: books
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -18,15 +18,15 @@ services:
       context: .
     restart: always
     environment:
-      DATABASE_URL: postgres://admin:pass@db:5432/books
-      JWT_SECRET: Catcherintherye
-      JWT_EXPIRES_IN: 1d
-      PORT: 3000
-      SENDGRID_API_KEY: your_sendgrid_api_key
-      EMAIL_FROM: books@lovers.com
-      FRONTEND_URL: http://localhost:3000
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      PORT: ${PORT}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      EMAIL_FROM: ${EMAIL_FROM}
+      FRONTEND_URL: ${FRONTEND_URL}
     ports:
-      - "3000:3000"
+      - "${PORT}:${PORT}"
     depends_on:
       - db
     volumes:
